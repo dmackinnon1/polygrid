@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<style>
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+</style>
+</head>
+<script src="polydiv.js"> </script>
+<script src="polydiv_tests.js"> </script>
+<script>
+$(document).ready(function(){
+    $("#latexButton").on("click", function(event){
+		 console.log("latexButton click handler");	 
+		 var divisionResult = new Rational(new Poly([3,-1,0,9]), new Poly([-2,3])).simplify();
+		 $("#gridDisplay").html(divisionResult.htmlGrid());
+		 $("#latexHolder").html(latexRemoteImage(divisionResult.latexShow())); <!-- use append() method to append instead of replace -->
+	});	
+});
+
+</script>
+
+<body>
+Just a test page. See the console.
+
+<br>
+<hr>
+<br>
+
+
+<button id="latexButton">Click</button>
+
+<br>
+<hr>
+<br>
+
+<div id="latexHolder"></div>
+
+<div id="gridDisplay"></div>
+
+</body>
+
+</html>

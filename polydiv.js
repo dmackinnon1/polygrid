@@ -397,6 +397,10 @@ class DivisionResult {
 		return this.question.revLatexShow() + " = " + this.solution.latexShow();
 	}
 	
+	latexShowQuestion() {
+		return this.question.revLatexShow();
+	}
+	
 	show() {
 		console.log("--- start grid ----")
 		for (var i = 0; i < this.grid.length; i++){
@@ -435,10 +439,45 @@ class DivisionResult {
 		table += "</table>"	
 		return table;
 	}
+	//TODO: refactor these to reuse (latex mode)
+	internalLatexHtmlTableRow(firstTerm, remainingTerms) {
+		var rowHtml = "<tr>";
+		rowHtml += "<td>" + this.latexRemoteImage(firstTerm.show()) + "</td>";
+		for (var i = remainingTerms.rawSize() -1; i > 0; i--) {
+			rowHtml += "<td>" + this.latexRemoteImage(remainingTerms.polyAt(i).show()) + "</td>";
+		}
+		return rowHtml += "</tr>";
+	}
+	
+	internalLatexHtmlTopRow(terms) {
+		var rowHtml = "<tr>";
+		rowHtml += "<td></td>";
+		for (var i = terms.rawSize() -1; i >= 0; i--) {
+			rowHtml += "<td>" + this.latexRemoteImage(terms.polyAt(i).show()) + "</td>";
+		}
+		return rowHtml += "</tr>";
+	}
+	
+	htmlLatexGrid(){
+		var table = "<table>";
+		table += this.internalLatexHtmlTopRow(this.solution.main);
+		var limit = this.grid.length - 1;
+		for(var i = 0; i< this.grid.length; i ++) {
+			table += this.internalLatexHtmlTableRow(this.question.denominator.polyAt(limit-i), this.grid[limit-i]);
+		}
+		table += "</table>"	
+		return table;
+	}
 	
 	toString() {
 		return this.show();
 	}	
+	
+	latexRemoteImage(latexString) {
+		console.log("latexRemoteImage provided polnomial: " + latexString);
+		var imgStr = "<img src='http://latex.codecogs.com/gif.latex?" + latexString +"'alt='" + latexString + "'/>";
+		return imgStr;
+	}
 }
 
 

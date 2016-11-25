@@ -1,40 +1,91 @@
 <!DOCTYPE HTML>
 <html>
 <head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"> 
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
 <style>
 table, th, td {
+	padding: 4px;
+	text-align: center;
     border: 1px solid black;
     border-collapse: collapse;
 }
+
 </style>
 </head>
 <script src="polydiv.js"> </script>
-<script src="polydiv_tests.js"> </script>
+<!-- script src="polydiv_tests.js"> </script> -->
 <script>
+function displayQuestion(divisionResult) {
+
+	var htmlString = " <div class='row'>";
+	htmlString += " <div class='col-sm-4'>";
+	htmlString += " </div>";
+	htmlString += " <div class='col-sm-4'>";
+	htmlString += latexRemoteImage(divisionResult.latexShowQuestion());
+	htmlString += " </div>";
+	htmlString += " <div class='col-sm-4'>";
+	htmlString += " </div>";
+	htmlString += " </div>";
+	return htmlString;
+};
+function displayAnswer(divisionResult) {
+	var htmlString = "<button type='button' class='btn btn-info aDisplay' data-toggle='collapse' data-target='#demo'>Show Answer</button>";
+	htmlString += "<div id='demo' class='collapse' style='text-align: center'>";
+	htmlString += " <div class='row'>";
+	htmlString += " <div class='col-sm-4'>";
+	htmlString += " </div>";
+	htmlString += " <div class='col-sm-4'>";
+	htmlString += divisionResult.htmlLatexGrid();
+	htmlString += " </div>";
+	htmlString += " <div class='col-sm-4'>";
+	htmlString += " </div>";
+	htmlString += " </div>";
+	//second row
+	htmlString += "<br><br>";
+	/*
+	htmlString += " <div class='row'>";
+	htmlString += " <div class='col-sm-2'>";
+	htmlString += " </div>";
+	htmlString += " <div class='col-sm-8'>";
+	htmlString += latexRemoteImage(divisionResult.latexShow());
+	htmlString += " </div>";
+	htmlString += " <div class='col-sm-2'>";
+	htmlString += " </div>";
+	htmlString += " </div>";
+	*/
+	htmlString += " <div>";
+	htmlString += latexRemoteImage(divisionResult.latexShow());
+	htmlString += " </div>";
+	htmlString += " </div>";
+	return htmlString;
+};
+	
 $(document).ready(function(){
     $("#latexButton").on("click", function(event){
 		 console.log("latexButton click handler");	 
 		 var divisionResult = new Rational(new Poly([3,-1,0,9]), new Poly([-2,3])).simplify();
-		 $("#gridDisplay").html(divisionResult.htmlGrid());
-		 $("#latexHolder").html(latexRemoteImage(divisionResult.latexShow())); <!-- use append() method to append instead of replace -->
+		 $("#latexHolder").append(displayQuestion(divisionResult)); 
+		 $("#latexHolder").append(displayAnswer(divisionResult)); 
+		 $("#latexHolder").append("</hr>"); 		 
 	});	
 });
-
 </script>
 
 <body>
-Just a test page. See the console.
 
+<div class="container-fluid">
+<div class="page-header">
+	<h1>Polynomial Division using the Grid Method</h1>
+</div> 	
 <br>
-<hr>
+<button id="latexButton">example</button>
 <br>
-
-
-<button id="latexButton">Click</button>
-
-<br>
-<hr>
 <br>
 
 <div id="latexHolder"></div>

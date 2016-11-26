@@ -21,8 +21,12 @@ table, th, td {
 <script src="polydiv.js"> </script>
 <!-- script src="polydiv_tests.js"> </script> -->
 <script>
+function div(numerator,denominator ){
+	return new Rational(new Poly(numerator),new Poly(denominator));
+	}
+var examples = [div([3.-1,9],[-2,3]), div([-3,2,1],[1,1]), div([-10,-3,9,27],[-2,3])];
+var count = 0;
 function displayQuestion(divisionResult) {
-
 	var htmlString = " <div class='row'>";
 	htmlString += " <div class='col-sm-4'>";
 	htmlString += " </div>";
@@ -35,8 +39,10 @@ function displayQuestion(divisionResult) {
 	return htmlString;
 };
 function displayAnswer(divisionResult) {
-	var htmlString = "<button type='button' class='btn btn-info aDisplay' data-toggle='collapse' data-target='#demo'>Show Answer</button>";
-	htmlString += "<div id='demo' class='collapse' >";
+	var htmlString = "<button type='button' class='btn btn-info aDisplay'";
+	htmlString += " data-toggle='collapse' data-target='#demo"+ count + "'>";
+	htmlString += "Show Answer</button>";
+	htmlString += "<div id='demo" + count +"' class='collapse' >";
 	htmlString += " <div class='row'>";
 	htmlString += " <div class='col-sm-4'>";
 	htmlString += " </div>";
@@ -60,14 +66,31 @@ function displayAnswer(divisionResult) {
 	
 	return htmlString;
 };
-	
-$(document).ready(function(){
-    $("#latexButton").on("click", function(event){
+
+function nextButton(){
+	return "<br><button id='" + "nb" + count + "' class='nextButton' onclick='handleClick(event)'>next example</button>";
+};
+function handleClick(event) {
 		 console.log("latexButton click handler");	 
-		 var divisionResult = new Rational(new Poly([3,-1,0,9]), new Poly([-2,3])).simplify();
+		 event.currentTarget.visibility = "hidden";
+		 var divisionResult = examples[count].simplify();
+		 count ++;
 		 $("#latexHolder").append(displayQuestion(divisionResult)); 
 		 $("#latexHolder").append(displayAnswer(divisionResult)); 
-		 $("#latexHolder").append("</hr>"); 		 
+		 $("#latexHolder").append("<hr>"); 	
+		 if (count < examples.length) {
+			$("#latexHolder").append(nextButton()); 	
+		}
+		if (count > 0) {
+			$("#nb" + (count - 1) ).attr('disabled',true);	
+		}			
+};		
+	
+$(document).ready(function(){
+    $(".nextButton").on("click", function(event){
+		$(".nextButton").attr('disabled',true);
+		//$(".nextButton").attr('style','display = none');
+		handleClick(event)
 	});	
 });
 </script>
@@ -79,13 +102,16 @@ $(document).ready(function(){
 	<h1>Polynomial Division using the Grid Method</h1>
 </div> 	
 <br>
-<button id="latexButton">example</button>
+<button id="latexButton" class="nextButton">example</button>
 <br>
 <br>
 
 <div id="latexHolder"></div>
 
-<div id="gridDisplay"></div>
+<div id="bottomElement">
+<br>
+<br>
+</div>
 
 </body>
 

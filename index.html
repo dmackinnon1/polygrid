@@ -36,7 +36,7 @@ function displayQuestion(divisionResult) {
 };
 function displayAnswer(divisionResult) {
 	var htmlString = "<button type='button' class='btn btn-info aDisplay' data-toggle='collapse' data-target='#demo'>Show Answer</button>";
-	htmlString += "<div id='demo' class='collapse' style='text-align: center'>";
+	htmlString += "<div id='demo' class='collapse' >";
 	htmlString += " <div class='row'>";
 	htmlString += " <div class='col-sm-4'>";
 	htmlString += " </div>";
@@ -48,21 +48,16 @@ function displayAnswer(divisionResult) {
 	htmlString += " </div>";
 	//second row
 	htmlString += "<br><br>";
-	/*
 	htmlString += " <div class='row'>";
-	htmlString += " <div class='col-sm-2'>";
+	htmlString += " <div class='col-sm-3'>";
 	htmlString += " </div>";
-	htmlString += " <div class='col-sm-8'>";
+	htmlString += " <div class='col-sm-6' >";
 	htmlString += latexRemoteImage(divisionResult.latexShow());
 	htmlString += " </div>";
-	htmlString += " <div class='col-sm-2'>";
+	htmlString += " <div class='col-sm-3'>";
 	htmlString += " </div>";
 	htmlString += " </div>";
-	*/
-	htmlString += " <div>";
-	htmlString += latexRemoteImage(divisionResult.latexShow());
-	htmlString += " </div>";
-	htmlString += " </div>";
+	
 	return htmlString;
 };
 	

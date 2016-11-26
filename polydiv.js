@@ -82,7 +82,7 @@ class Poly {
 					rep += " - ";
 				}
 				
-				if (this.coefficient(i) != 1) {
+				if (this.coefficient(i) != 1 && this.coefficient(i) !== -1) {
 					if (this.coefficient(i) > 0) {
 						rep += this.coefficient(i);
 					} else {
@@ -90,7 +90,8 @@ class Poly {
 					}
 				}
 			} else {
-				rep +=  this.coefficient(i) 
+				if ((this.coefficient(i) !== 1 && (this.coefficient(i) !== -1)) || (i === 0)) 
+					rep +=  this.coefficient(i) 
 			}
 			first = false;
 			if (i === 1){
@@ -128,18 +129,24 @@ class Poly {
 						rep += this.coefficient(i);
 					} else if (this.coefficient(i) !== -1){
 						rep += (-1 * this.coefficient(i));
+					} else {
+						rep += "1";
 					}
 				} else {
 					if (i === 0){
 						rep += "1";
 					} 
 				}
-			} else {
-				if (this.coefficient(i) === -1){
+			} else {	
+				if ((this.coefficient(i) !== 1 && (this.coefficient(i) !== -1)) || (i === 0)){ 
+					rep +=  this.coefficient(i) 
+				} else if(this.coefficient(i) === -1){
+					if (i == 0){
+						rep += "1";
+					} else {
 						rep +=  "-";
-				} else if(this.coefficient(i) !== 1){
-						rep +=  this.coefficient(i);
-				}		
+					}
+				} 
 			}
 			first = false;
 			if (i === 1){
@@ -413,9 +420,9 @@ class DivisionResult {
 	
 	internalHtmlTableRow(firstTerm, remainingTerms) {
 		var rowHtml = "<tr>";
-		rowHtml += "<td>" + firstTerm.show() + "</td>";
+		rowHtml += "<td>" + firstTerm.revShow() + "</td>";
 		for (var i = remainingTerms.rawSize() -1; i > 0; i--) {
-			rowHtml += "<td>" + remainingTerms.polyAt(i).show() + "</td>";
+			rowHtml += "<td>" + remainingTerms.polyAt(i).revShow() + "</td>";
 		}
 		return rowHtml += "</tr>";
 	}
@@ -424,7 +431,7 @@ class DivisionResult {
 		var rowHtml = "<tr>";
 		rowHtml += "<td></td>";
 		for (var i = terms.rawSize() -1; i >= 0; i--) {
-			rowHtml += "<td>" + terms.polyAt(i).show() + "</td>";
+			rowHtml += "<td>" + terms.polyAt(i).revShow() + "</td>";
 		}
 		return rowHtml += "</tr>";
 	}
@@ -442,9 +449,9 @@ class DivisionResult {
 	//TODO: refactor these to reuse (latex mode)
 	internalLatexHtmlTableRow(firstTerm, remainingTerms) {
 		var rowHtml = "<tr>";
-		rowHtml += "<td>" + this.latexRemoteImage(firstTerm.show()) + "</td>";
+		rowHtml += "<td>" + this.latexRemoteImage(firstTerm.revShow()) + "</td>";
 		for (var i = remainingTerms.rawSize() -1; i > 0; i--) {
-			rowHtml += "<td>" + this.latexRemoteImage(remainingTerms.polyAt(i).show()) + "</td>";
+			rowHtml += "<td>" + this.latexRemoteImage(remainingTerms.polyAt(i).revShow()) + "</td>";
 		}
 		return rowHtml += "</tr>";
 	}
@@ -453,7 +460,7 @@ class DivisionResult {
 		var rowHtml = "<tr>";
 		rowHtml += "<td></td>";
 		for (var i = terms.rawSize() -1; i >= 0; i--) {
-			rowHtml += "<td>" + this.latexRemoteImage(terms.polyAt(i).show()) + "</td>";
+			rowHtml += "<td>" + this.latexRemoteImage(terms.polyAt(i).revShow()) + "</td>";
 		}
 		return rowHtml += "</tr>";
 	}

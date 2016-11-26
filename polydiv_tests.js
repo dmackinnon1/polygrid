@@ -1,5 +1,12 @@
 
 //$.getScript('polydiv.js', function() {} put tests in here if test.html does not include the dependency
+console.log("formatting tests");
+console.log("=======================");
+
+console.log("" + new Poly([-1]).revShow() + " | " + new Poly([-1]));
+console.log("" + new Poly([1]).revShow() + " | " + new Poly([1]));
+console.log("" + new Poly([1,1,1]).revShow() + " | " + new Poly([1,1,1]));
+console.log("" + new Poly([-1,-1,-1]).revShow() + " | " + new Poly([-1,-1,-1]));
 
 console.log("begin polynomial tests");
 console.log("=======================");

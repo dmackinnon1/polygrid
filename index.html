@@ -6,6 +6,9 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
 </head>
 
 <style>
@@ -67,23 +70,23 @@ function nextButton(){
 	return "<br><button id='" + "nb" + count + "' class='nextButton btn btn-default' onclick='handleClick(event)'>next example</button>";
 };
 function handleClick(event) {
-		 console.log("latexButton click handler");	 
-		 var divisionResult = nextExample().simplify();
-		 $("#latexHolder").append("<h2> example " + exampleCount + "</h3>");
-		 exampleCount ++;
-		 $("#latexHolder").append(displayQuestion(divisionResult)); 
-		 $("#latexHolder").append(displayAnswer(divisionResult)); 
-		 $("#latexHolder").append("<hr>"); 	
-		 if (hasMoreExamples()) {
+		console.log("latexButton click handler");	 
+		var divisionResult = nextExample().simplify();
+		$("#latexHolder").append("<h2> example " + exampleCount + "</h3>");
+		exampleCount ++;
+		$("#latexHolder").append(displayQuestion(divisionResult)); 
+		$("#latexHolder").append(displayAnswer(divisionResult)); 
+		$("#latexHolder").append("<hr>"); 	
+		if (hasMoreExamples()) {
 			$("#latexHolder").append(nextButton()); 	
 		}
 		event.currentTarget.remove();
+		MathJax.Hub.Typeset(); //required to render dynamically generated Latex
 };		
 	
 $(document).ready(function(){
     $(".nextButton").on("click", function(event){
 		$(".nextButton").attr('disabled',true);
-		//$(".nextButton").attr('style','display = none');
 		handleClick(event)
 	});	
 });

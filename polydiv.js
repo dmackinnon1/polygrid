@@ -259,7 +259,7 @@ class Poly {
 		for(var i = 0; i < this.rawSize(); i++) {
 			for (var j = 0; j < other.rawSize(); j++) {
 				var existing = newTerms[(i+j)];
-				newTerms.splice(i+j, 1, existing + (this.coefficient(i) * (other.coefficient(j))));
+				newTerms[i+j] = existing + (this.coefficient(i) * (other.coefficient(j)));
 			}
 		}
 		return new Poly(newTerms).trim();
@@ -482,7 +482,6 @@ class DivisionResult {
 	}	
 	
 	latexRemoteImage(latexString) {
-		console.log("latexRemoteImage provided polnomial: " + latexString);
 		return "$$"+latexString +"$$";
 		//var imgStr = "<img src='http://latex.codecogs.com/gif.latex?" + latexString +"'alt='" + latexString + "'/>";
 		return imgStr;
@@ -496,7 +495,6 @@ class DivisionResult {
 * The latext text is supplied via a query parameter to the GET method shown below.
 */
 function latexRemoteImage(latexString) {
-	console.log("latexRemoteImage provided polnomial: " + latexString);
 	var mathJaxDelimiter = "$$";
 	return mathJaxDelimiter + latexString + mathJaxDelimiter;
 	//return "<img src='http://latex.codecogs.com/gif.latex?" + latexString +"'alt='" + latexString + "'/>";

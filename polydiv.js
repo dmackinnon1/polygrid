@@ -467,7 +467,7 @@ class DivisionResult {
 	}
 	
 	htmlLatexGrid(){
-		var table = "<table>";
+		var table = "<table align='center'>";
 		table += this.internalLatexHtmlTopRow(this.solution.main);
 		var limit = this.grid.length - 1;
 		for(var i = 0; i< this.grid.length; i ++) {

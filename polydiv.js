@@ -400,6 +400,23 @@ class DivisionResult {
 		this.solution = solution;
 	}
 	
+	validate() {
+		var remainder = null;
+		if (this.solution.remainder !== null) {
+			remainder = this.solution.remainder.numerator;
+		}	
+		var denom = this.question.denominator;
+		var quotient = this.solution.main;
+		var computed = null;
+		if (remainder !== null) {
+			computed = quotient.prod(denom).add(remainder);
+		} else {
+			computed = quotient.prod(denom)
+		};
+		console.log("computed: " + computed + " original: " + this.question.numerator);
+		return this.question.numerator.isEqual(computed);	
+	}
+
 	latexShow() {
 		return this.question.revLatexShow() + " = " + this.solution.latexShow();
 	}

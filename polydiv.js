@@ -283,6 +283,7 @@ class Poly {
 		}
 		var quotient = new Poly([0]);
 		var grid = [];
+		var history = [];
 		for(var i=0; i<= n; i++ ) {
 			grid.push(new Poly([0]));
 		}
@@ -294,21 +295,41 @@ class Poly {
 			for(var i = n; i >=0; i--) {	
 				var temp = grid[i].add(other.polyAt(i).prod(quotient.polyAt(k)));
 				grid[i] = temp;
+				history.push(this.cloneGrid(grid));
 			}
-		}
-		
+		}		
 		//printGrid(0, n, grid);
 		var question = new Rational(this, other);
 		var product = quotient.prod(other);
+		for(var i = 0; i < history.length; i ++){
+			var localGrid = history[i];
+			for (var j = 0; j < localGrid.length; j++){
+				console.log(localGrid[j].toString());
+			}
+		}
 		if (this.isEqual(product)){
-			return new DivisionResult(question, grid, new Mixed(quotient, null));
+			return new DivisionResult(question, grid, history, new Mixed(quotient, null));
 		}
 		
 		var rNum = this.sub(product);
-		return  new DivisionResult(question, grid, new Mixed(quotient, new Rational(rNum, other)));
+		return  new DivisionResult(question, grid, history, new Mixed(quotient, new Rational(rNum, other)));
 		
 	}
 	
+	clone() {
+		var copies = this.coefficients.slice();
+		return new Poly(copies);
+	}
+	
+	cloneGrid(aGrid) {
+		var cloneGrid = [];
+		for(var i = 0; i < aGrid.length; i++){
+			cloneGrid.push(aGrid[i].clone());
+		}			
+		return cloneGrid;
+	}
+	
+
 };
 
 /*
@@ -394,11 +415,13 @@ class DivisionResult {
 	* grid is an array of polygons, showing the stages of grid division
 	* solution is the final result, a Mixed expression (can contain Poly, plus Rational)
 	*/
-	constructor(question, grid, solution) {
+	constructor(question, grid, history, solution) {
 		this.question = question;
 		this.grid = grid;
 		this.solution = solution;
+		this.history = history;
 	}
+	
 	
 	validate() {
 		var remainder = null;

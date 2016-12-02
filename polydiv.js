@@ -558,6 +558,9 @@ class DivisionResult {
 			htmlSection += "<br>In this case, there is a remainder: ";
 			htmlSection += this.remainderCalculation();
 			htmlSection += "<br>";
+		} else {
+			htmlSection += "<br>In this case, the sum of all the inner cells of the grid equals the dividend, so the remainder is zero.";
+			htmlSection += "<br>";
 		}
 		return htmlSection;		
 	}

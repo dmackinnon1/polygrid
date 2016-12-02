@@ -292,21 +292,17 @@ class Poly {
 		for (var k = m-n; k >=0; k-- ){
 			var t = k+n;
 			quotient.addToTerm(k, (this.coefficient(t) - this.sumAt(t,grid))/other.coefficient(n));
+			history.push(new GridPair(this.cloneGrid(grid), k));
 			for(var i = n; i >=0; i--) {	
 				var temp = grid[i].add(other.polyAt(i).prod(quotient.polyAt(k)));
 				grid[i] = temp;
-				history.push(this.cloneGrid(grid));
+				//history.push(this.cloneGrid(grid));
 			}
-		}		
+		}	
+		history.push(new GridPair(this.cloneGrid(grid), -1));		
 		//printGrid(0, n, grid);
 		var question = new Rational(this, other);
 		var product = quotient.prod(other);
-		for(var i = 0; i < history.length; i ++){
-			var localGrid = history[i];
-			for (var j = 0; j < localGrid.length; j++){
-				console.log(localGrid[j].toString());
-			}
-		}
 		if (this.isEqual(product)){
 			return new DivisionResult(question, grid, history, new Mixed(quotient, null));
 		}
@@ -328,8 +324,13 @@ class Poly {
 		}			
 		return cloneGrid;
 	}
-	
+};
 
+class GridPair {
+	constructor(grid, column) {
+		this.grid = grid;
+		this.column = column;
+	}
 };
 
 /*
@@ -422,6 +423,17 @@ class DivisionResult {
 		this.history = history;
 	}
 	
+	remainderCalculation() {
+		var prod = this.question.denominator.prod(this.solution.main);
+		var remain = this.question.numerator.sub(prod);
+		var htmlString = this.question.numerator.revShow() + " - " + prod.revShow();
+		htmlString += " = " + remain.revShow();
+		return "$$" + remain + "$$";
+	}
+	
+	hasRemainder() {
+		return this.solution.remainder !== null;
+	}
 	
 	validate() {
 		var remainder = null;
@@ -487,31 +499,87 @@ class DivisionResult {
 		return table;
 	}
 	//TODO: refactor these to reuse (latex mode)
-	internalLatexHtmlTableRow(firstTerm, remainingTerms, columns) {
+	internalLatexHtmlTableRow(firstTerm, remainingTerms, columns, limit) {
 		var rowHtml = "<tr>";
 		rowHtml += "<td>" + this.latexRemoteImage(firstTerm.revShow()) + "</td>";
 		for (var i = 0; i <= columns; i++) {
 			var index = remainingTerms.rawSize() -1 -i;
-			rowHtml += "<td>" + this.latexRemoteImage(remainingTerms.polyAt(index).revShow()) + "</td>";
+			if (columns - i > limit)
+				rowHtml += "<td>" + this.latexRemoteImage(remainingTerms.polyAt(index).revShow()) + "</td>";
+			else
+				rowHtml += "<td>" + "-- ? --" + "</td>";
+
 		}
 		return rowHtml += "</tr>";
 	}
+		
 	
-	internalLatexHtmlTopRow(terms) {
+	internalLatexHtmlTopRow(terms, limit) {
 		var rowHtml = "<tr>";
 		rowHtml += "<td></td>";
 		for (var i = terms.rawSize() -1; i >= 0; i--) {
-			rowHtml += "<td>" + this.latexRemoteImage(terms.polyAt(i).revShow()) + "</td>";
+			if (i > limit)
+				rowHtml += "<td>" + this.latexRemoteImage(terms.polyAt(i).revShow()) + "</td>";
+			else 
+				rowHtml += "<td>" + "-- ? --" + "</td>";
 		}
 		return rowHtml += "</tr>";
 	}
+		
+	htmlLatexHistory() {
+		var answerSoFar = new Poly([0]);
+		var htmlSection = "";
+		for (var i = 0; i < this.history.length; i++) {
+			var step = this.history.length - this.history[i].column - 1;
+			answerSoFar = answerSoFar.add(this.solution.main.polyAt(this.solution.main.degree() - i));
+			htmlSection += "<br><h3> Step " + step + "</h3>";
+			if (step === 1) {
+				htmlSection += "First, place the divisor down the first column of the grid.";
+				htmlSection += " The goal is to find a polynomial to place along the top so that when the grid is filled ";
+				htmlSection += "in with the product, the sum of all the terms filled in equals the dividend."
+				htmlSection += "<br><br>";
+			} else if (step == 2){
+				htmlSection += "The product of the first two cells must give us the first term in the dividend.";
+				htmlSection += "The rest of the column is found by multiplying each of the terms in the divisor by the term that was placed in the top row.";
+				htmlSection += "<br><br>";
+			} else if (step === this.history.length) {
+				htmlSection += "Once the whole table is filled in, if the sum of all the internal cells equals the dividend, we are done."
+				htmlSection += " Otherwise, we know that we have a remainder. To find the remainder, subtract the sum of the internal cells ";
+				htmlSection += "of the grid from the divisor. What is left over is the remainder."
+				htmlSection += "<br><br>";
+			} else {
+				htmlSection += "Continue filling in the top row with an value that will give the amount required to obtain the next highest power of the divisor."
+				htmlSection += " Then fill in the rest of the column by multiplying by the terms in the first column.";
+				htmlSection += "<br><br>";
+			}
+			htmlSection += this.htmlHistoryEntry(this.history[i].grid, this.history[i].column, answerSoFar);
+		}
+		if (this.hasRemainder()){
+			htmlSection += "<br>In this case, there is a remainder: ";
+			htmlSection += this.remainderCalculation();
+			htmlSection += "<br>";
+		}
+		return htmlSection;		
+	}
+	
+	htmlHistoryEntry(histGrid, index, answerSoFar) {
+		var table = "<table align='center'>";
+		table += this.internalLatexHtmlTopRow(answerSoFar, index);
+		var limit = this.grid.length - 1;
+		for(var i = 0; i< this.grid.length; i ++) {
+			table += this.internalLatexHtmlTableRow(this.question.denominator.polyAt(limit-i), histGrid[limit-i], this.solution.main.degree(), index);
+		}
+		table += "</table>"	
+		return table;
+	}
+	
 	
 	htmlLatexGrid(){
 		var table = "<table align='center'>";
-		table += this.internalLatexHtmlTopRow(this.solution.main);
+		table += this.internalLatexHtmlTopRow(this.solution.main, -1);
 		var limit = this.grid.length - 1;
 		for(var i = 0; i< this.grid.length; i ++) {
-			table += this.internalLatexHtmlTableRow(this.question.denominator.polyAt(limit-i), this.grid[limit-i], this.solution.main.degree());
+			table += this.internalLatexHtmlTableRow(this.question.denominator.polyAt(limit-i), this.grid[limit-i], this.solution.main.degree(),-1);
 		}
 		table += "</table>"	
 		return table;
@@ -526,13 +594,14 @@ class DivisionResult {
 		//var imgStr = "<img src='http://latex.codecogs.com/gif.latex?" + latexString +"'alt='" + latexString + "'/>";
 		return imgStr;
 	}
-}
+};
 
 // todo: move latex functions to another location?
 
 /*
 * latex.codecogs.com provides a web service that will render latex, returnign a gif image.
 * The latext text is supplied via a query parameter to the GET method shown below.
+* This method was abandoned in favor of mathjax rendering.
 */
 function latexRemoteImage(latexString) {
 	var mathJaxDelimiter = "$$";

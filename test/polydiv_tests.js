@@ -16,6 +16,31 @@ var test9 = new Rational(new Poly([0,1,0,1]), new Poly([1,2])).simplify();
 
 var cases = [test1, test2, test3, test4, test5, test6, test7, test8, test9];
 
+QUnit.test( "printing_test_1", function( assert ) { 
+		var p = new Poly([0]);
+		assert.ok(true, "poly: " + p.toString());
+	});
+
+QUnit.test( "printing_test_2", function( assert ) { 
+		var p = new Poly([1]);
+		assert.ok(true, "poly: " + p.toString());
+	});
+	
+QUnit.test( "printing_test_3", function( assert ) { 
+		var p = new Poly([-1]);
+		assert.ok(true, "poly: " + p.toString());
+	});
+	
+QUnit.test( "printing_test_4", function( assert ) { 
+		var p = new Poly([0,1]);
+		assert.ok(true, "poly: " + p.toString());
+	});
+	
+QUnit.test( "printing_test_5", function( assert ) { 
+		var p = new Poly([8,2]);
+		assert.ok(true, "poly: " + p.toString());
+	});
+
 var cindex = 0; //a secondary index is required - the index i is not available on function execution.
 for (var i = 0; i< cases.length; i++){
 	QUnit.test( "test: " + cases[i].question.toString(), function( assert ) { 

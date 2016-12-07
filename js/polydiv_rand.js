@@ -65,7 +65,7 @@ function randomRational() {
 	//3 now pick a denominator, make it in the range of deg 1 to 3.
 	var denominator = null;
 	if (remainder.isEqual(Poly.zero())) {
-		denominator = randomPoly(randomRange(1,3);
+		denominator = randomPoly(randomRange(1,3));
 	} else {
 		denominator = randomPoly(remainder.degree() + 1);
 	}	

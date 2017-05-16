@@ -10,9 +10,9 @@ Students generally learn a method that closely resembles traditional integer "lo
 For each example, two single variable polynomials (the dividend and the divisor) are generated with some constraints on the degree and coefficients. The grid division algorithm is carried out, returning the quotient and remainder, with intermediate steps available for display.
 
 I have been playing around with polynomial grid division for a while. Please see these posts:
-* [Dividing Polynomials - The Grid Method] (http://www.mathrecreation.com/2009/03/dividing-polynomials-grid-method.html)
-* [More Polynomial Grid Division] (http://www.mathrecreation.com/2015/09/more-polynomial-grid-division.html)
-* [Generic Rectangles] (http://www.mathrecreation.com/2012/09/generic-rectanges.html)
+* [Dividing Polynomials - The Grid Method](http://www.mathrecreation.com/2009/03/dividing-polynomials-grid-method.html)
+* [More Polynomial Grid Division](http://www.mathrecreation.com/2015/09/more-polynomial-grid-division.html)
+* [Generic Rectangles](http://www.mathrecreation.com/2012/09/generic-rectanges.html)
 
 The current polygid infra does not handle the 'backwards' style of polynomial grid division, which you can read about here:
 * [dividing polynomials: the backwards reverse tabular method](http://www.mathrecreation.com/2016/03/dividing-polynomials-backwards-reverse.html)
